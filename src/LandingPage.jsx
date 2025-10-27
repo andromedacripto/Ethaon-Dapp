@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ArrowRight, Lock, Zap, Eye, Shield, Vote, Users, BarChart3 } from 'lucide-react';
 
-export default function LandingPage({ onLaunchApp }) {
+export default function LandingPage() {
   const [particles, setParticles] = useState([]);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
@@ -27,6 +27,10 @@ export default function LandingPage({ onLaunchApp }) {
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
+
+  const handleJoinTestnet = () => {
+    window.open('/testnet', '_blank', 'noopener,noreferrer');
+  };
 
   return (
     <div className="relative min-h-screen bg-black text-white overflow-hidden">
@@ -75,7 +79,7 @@ export default function LandingPage({ onLaunchApp }) {
       {/* Header - Launch Button */}
       <div className="fixed top-8 right-8 z-[100]">
         <button
-          onClick={onLaunchApp}
+          onClick={handleJoinTestnet}
           className="group relative px-8 py-3 bg-white text-black font-semibold rounded-none overflow-hidden transition-all hover:scale-[1.02] border-2 border-white cursor-pointer"
         >
           <div className="absolute inset-0 bg-black translate-y-full group-hover:translate-y-0 transition-transform duration-300 pointer-events-none"></div>
