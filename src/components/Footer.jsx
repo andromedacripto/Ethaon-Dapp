@@ -149,8 +149,8 @@ export default function Footer() {
           </div>
           
           <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
-            <p>© 2025 Ethaon. Built with privacy in mind.</p>
-            <p className="mt-2 md:mt-0">Powered by TEN Protocol</p>
+            <p>© 2025 Ethaon. All rights reserved.</p>
+            <p className="mt-2 md:mt-0">Powered by Ethaon</p>
           </div>
         </div>
       </footer>
@@ -416,12 +416,12 @@ function TermsContent() {
 
       <section>
         <h3 className="text-xl font-bold text-white mb-3">1. Acceptance of Terms</h3>
-        <p>By accessing and using PRIVA, you accept and agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our platform.</p>
+        <p>By accessing and using Ethaon, you accept and agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our platform.</p>
       </section>
 
       <section>
         <h3 className="text-xl font-bold text-white mb-3">2. Description of Service</h3>
-        <p>PRIVA provides a decentralized voting platform built on TEN Protocol that enables users to create polls and cast votes with complete privacy through blockchain encryption technology.</p>
+        <p>Ethaon provides a decentralized voting platform built on TEN Protocol that enables users to create polls and cast votes with complete privacy through blockchain encryption technology.</p>
       </section>
 
       <section>
@@ -449,7 +449,7 @@ function TermsContent() {
 
       <section>
         <h3 className="text-xl font-bold text-white mb-3">5. Privacy and Encryption</h3>
-        <p>While PRIVA uses encryption technology to protect vote privacy, users acknowledge that:</p>
+        <p>While Ethaon uses encryption technology to protect vote privacy, users acknowledge that:</p>
         <ul className="list-disc pl-6 space-y-2 mt-2">
           <li>Votes are encrypted until poll deadline</li>
           <li>Results become public after the deadline</li>
@@ -460,17 +460,17 @@ function TermsContent() {
 
       <section>
         <h3 className="text-xl font-bold text-white mb-3">6. Intellectual Property</h3>
-        <p>The PRIVA platform, including its code, design, and branding, is protected by intellectual property rights. Users may not copy, modify, or distribute our platform without permission, except as allowed by our open-source license.</p>
+        <p>The Ethaon platform, including its code, design, and branding, is protected by intellectual property rights. Users may not copy, modify, or distribute our platform without permission, except as allowed by our open-source license.</p>
       </section>
 
       <section>
         <h3 className="text-xl font-bold text-white mb-3">7. Disclaimer of Warranties</h3>
-        <p>PRIVA is provided "as is" without warranties of any kind. We do not guarantee that the platform will be error-free, secure, or continuously available. Users use the platform at their own risk.</p>
+        <p>Ethaon is provided "as is" without warranties of any kind. We do not guarantee that the platform will be error-free, secure, or continuously available. Users use the platform at their own risk.</p>
       </section>
 
       <section>
         <h3 className="text-xl font-bold text-white mb-3">8. Limitation of Liability</h3>
-        <p>PRIVA and its developers shall not be liable for any damages arising from the use or inability to use the platform, including but not limited to loss of funds, data, or voting rights.</p>
+        <p>Ethaon and its developers shall not be liable for any damages arising from the use or inability to use the platform, including but not limited to loss of funds, data, or voting rights.</p>
       </section>
 
       <section>
@@ -487,7 +487,7 @@ function TermsContent() {
 
       <section>
         <h3 className="text-xl font-bold text-white mb-3">10. Modifications to Service</h3>
-        <p>PRIVA reserves the right to modify, suspend, or discontinue any part of the service at any time without notice. We may also update these terms periodically.</p>
+        <p>Ethaon reserves the right to modify, suspend, or discontinue any part of the service at any time without notice. We may also update these terms periodically.</p>
       </section>
 
       <section>
@@ -511,7 +511,7 @@ function PrivacyContent() {
 
       <section>
         <h3 className="text-xl font-bold text-white mb-3">1. Introduction</h3>
-        <p>PRIVA is committed to protecting your privacy. This Privacy Policy explains how we handle information when you use our decentralized voting platform. As a blockchain-based application, most data is stored on-chain and publicly accessible.</p>
+        <p>Ethaon is committed to protecting your privacy. This Privacy Policy explains how we handle information when you use our decentralized voting platform. As a blockchain-based application, most data is stored on-chain and publicly accessible.</p>
       </section>
 
       <section>
@@ -546,7 +546,7 @@ function PrivacyContent() {
 
       <section>
         <h3 className="text-xl font-bold text-white mb-3">4. Data Privacy & Encryption</h3>
-        <p>PRIVA leverages TEN Protocol's confidential computing to protect vote privacy:</p>
+        <p>Ethaon leverages TEN Protocol's confidential computing to protect vote privacy:</p>
         <ul className="list-disc pl-6 space-y-2 mt-2">
           <li><strong>Vote Encryption:</strong> Individual votes are encrypted and cannot be viewed until the poll deadline</li>
           <li><strong>Result Revelation:</strong> After the deadline, votes are automatically decrypted and aggregated results become public</li>
@@ -557,7 +557,7 @@ function PrivacyContent() {
 
       <section>
         <h3 className="text-xl font-bold text-white mb-3">5. Data Sharing</h3>
-        <p>PRIVA does not sell or share your personal information with third parties. However:</p>
+        <p>Ethaon does not sell or share your personal information with third parties. However:</p>
         <ul className="list-disc pl-6 space-y-2 mt-2">
           <li>Blockchain data is public by nature and accessible to anyone</li>
           <li>Third-party blockchain explorers can view on-chain transactions</li>
@@ -568,7 +568,7 @@ function PrivacyContent() {
 
       <section>
         <h3 className="text-xl font-bold text-white mb-3">6. Cookies and Tracking</h3>
-        <p>PRIVA uses minimal tracking technologies:</p>
+        <p>Ethaon uses minimal tracking technologies:</p>
         <ul className="list-disc pl-6 space-y-2 mt-2">
           <li><strong>Local Storage:</strong> Used to cache wallet connection status</li>
           <li><strong>No Analytics:</strong> We do not use Google Analytics or similar tracking services</li>
@@ -601,12 +601,12 @@ function PrivacyContent() {
 
       <section>
         <h3 className="text-xl font-bold text-white mb-3">9. Children's Privacy</h3>
-        <p>PRIVA is not intended for users under 13 years of age. We do not knowingly collect information from children. If we become aware of data collected from children, we will take steps to delete such information.</p>
+        <p>Ethaon is not intended for users under 13 years of age. We do not knowingly collect information from children. If we become aware of data collected from children, we will take steps to delete such information.</p>
       </section>
 
       <section>
         <h3 className="text-xl font-bold text-white mb-3">10. International Users</h3>
-        <p>PRIVA is accessible globally. By using the platform, you consent to the transfer and processing of your data on the blockchain, which operates across international borders.</p>
+        <p>Ethaon is accessible globally. By using the platform, you consent to the transfer and processing of your data on the blockchain, which operates across international borders.</p>
       </section>
 
       <section>
@@ -632,7 +632,7 @@ function PrivacyContent() {
       <section className="bg-purple-900/20 border border-purple-500/30 rounded-lg p-6 mt-8">
         <h3 className="text-xl font-bold text-white mb-3">Important Notice</h3>
         <p className="text-gray-300">
-          PRIVA is a decentralized application built on blockchain technology. While we implement privacy measures through encryption, 
+          Ethaon is a decentralized application built on blockchain technology. While we implement privacy measures through encryption, 
           blockchain data is inherently public and permanent. Users should be aware that their wallet addresses and transaction 
           history are visible on-chain. We recommend using dedicated wallets for voting if you wish to maintain additional privacy.
         </p>

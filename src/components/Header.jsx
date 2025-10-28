@@ -3,7 +3,9 @@ import { Lock, Wallet, LogOut, RefreshCw, Plus, Zap } from 'lucide-react';
 import { ethers } from 'ethers';
 
 export default function Header({ 
-  walletAddress, 
+  walletAddress,
+  displayAddress,
+  ensAvatar,
   isConnecting, 
   isLoading,
   onConnect, 
@@ -13,10 +15,6 @@ export default function Header({
 }) {
   const [ethBalance, setEthBalance] = useState('0.00');
   const [isLoadingBalance, setIsLoadingBalance] = useState(false);
-
-  const truncateAddress = (address) => {
-    return `${address.slice(0, 6)}...${address.slice(-4)}`;
-  };
 
   // Buscar saldo ETH
   useEffect(() => {
@@ -169,13 +167,22 @@ export default function Header({
                     </div>
                   </div>
 
-                  {/* Wallet Address */}
+                  {/* Wallet Address with Avatar */}
                   <div className="glow-border bg-gray-900/80 backdrop-blur-sm px-4 py-2.5 rounded-xl flex items-center space-x-2">
-                    <div className="relative">
-                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                      <div className="absolute inset-0 w-2 h-2 bg-green-500 rounded-full animate-ping"></div>
-                    </div>
-                    <span className="text-sm font-mono text-gray-300">{truncateAddress(walletAddress)}</span>
+                    {ensAvatar ? (
+                      <img 
+                        src={ensAvatar} 
+                        alt="ENS Avatar" 
+                        className="w-6 h-6 rounded-full border-2 border-purple-500/50"
+                        onError={(e) => e.target.style.display = 'none'}
+                      />
+                    ) : (
+                      <div className="relative">
+                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                        <div className="absolute inset-0 w-2 h-2 bg-green-500 rounded-full animate-ping"></div>
+                      </div>
+                    )}
+                    <span className="text-sm font-mono text-gray-300">{displayAddress}</span>
                   </div>
 
                   {/* Disconnect Button */}

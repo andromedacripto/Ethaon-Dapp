@@ -32,6 +32,8 @@ export default function PrivaVotingDApp() {
   const [polls, setPolls] = useState([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [walletAddress, setWalletAddress] = useState(null);
+  const [ensName, setEnsName] = useState(null);
+  const [ensAvatar, setEnsAvatar] = useState(null);
   const [isConnecting, setIsConnecting] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [provider, setProvider] = useState(null);
@@ -54,6 +56,33 @@ export default function PrivaVotingDApp() {
   const TEN_RPC_URL = 'https://testnet.ten.xyz';
   const TEN_NETWORK_NAME = 'TEN Testnet';
 
+  // Função para buscar ENS e Avatar
+  const lookupENS = async (address) => {
+    try {
+      // Usar mainnet provider para lookup de ENS
+      const mainnetProvider = new ethers.JsonRpcProvider('https://eth.llamarpc.com');
+      const ens = await mainnetProvider.lookupAddress(address);
+      
+      // Se encontrou ENS, buscar avatar
+      if (ens) {
+        try {
+          const resolver = await mainnetProvider.getResolver(ens);
+          if (resolver) {
+            const avatar = await resolver.getAvatar();
+            return { ens, avatar: avatar?.url || null };
+          }
+        } catch (error) {
+          console.log('Avatar lookup failed:', error);
+        }
+      }
+      
+      return { ens, avatar: null };
+    } catch (error) {
+      console.log('ENS lookup failed:', error);
+      return { ens: null, avatar: null };
+    }
+  };
+
   const checkWalletConnection = async () => {
     if (typeof window.ethereum !== 'undefined') {
       try {
@@ -65,6 +94,13 @@ export default function PrivaVotingDApp() {
           const web3Signer = await web3Provider.getSigner();
           setSigner(web3Signer);
           setWalletAddress(accounts[0]);
+          
+          // Buscar ENS e Avatar
+          const { ens, avatar } = await lookupENS(accounts[0]);
+          console.log('🔍 ENS encontrado:', ens);
+          console.log('🖼️ Avatar encontrado:', avatar);
+          setEnsName(ens);
+          setEnsAvatar(avatar);
         }
       } catch (error) {
         console.error('Error checking wallet:', error);
@@ -130,7 +166,13 @@ export default function PrivaVotingDApp() {
       setSigner(web3Signer);
       setWalletAddress(accounts[0]);
       
-      alert('Wallet connected to TEN Protocol!');
+      // Buscar ENS e Avatar
+      const { ens, avatar } = await lookupENS(accounts[0]);
+      console.log('🔍 ENS encontrado:', ens);
+      console.log('🖼️ Avatar encontrado:', avatar);
+      setEnsName(ens);
+      setEnsAvatar(avatar);
+      
     } catch (error) {
       console.error('Error connecting wallet:', error);
       alert('Failed to connect wallet');
@@ -141,6 +183,8 @@ export default function PrivaVotingDApp() {
 
   const disconnectWallet = () => {
     setWalletAddress(null);
+    setEnsName(null);
+    setEnsAvatar(null);
     setProvider(null);
     setSigner(null);
     setPolls([]);
@@ -353,12 +397,17 @@ export default function PrivaVotingDApp() {
   const activePolls = polls.filter(p => p.isActive).reverse();
   const endedPolls = polls.filter(p => !p.isActive).reverse();
 
+  // Exibir ENS ou endereço encurtado
+  const displayAddress = ensName || (walletAddress ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}` : null);
+
   return (
     <div className="min-h-screen bg-white pt-10">
       <Banner />
       
       <Header
         walletAddress={walletAddress}
+        displayAddress={displayAddress}
+        ensAvatar={ensAvatar}
         isConnecting={isConnecting}
         isLoading={isLoading || privaVoting.loading}
         onConnect={connectWallet}
