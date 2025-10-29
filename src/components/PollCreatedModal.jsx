@@ -1,13 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { CheckCircle, Copy, Check, X } from 'lucide-react';
-import { QRCodeSVG } from 'qrcode.react';
+import QRCode from 'qrcode';
 
 export default function PollCreatedModal({ show, onClose, pollId, pollTitle }) {
   const [copied, setCopied] = useState(false);
-
-  if (!show) return null;
+  const canvasRef = useRef(null);
 
   const pollUrl = `${window.location.origin}/testnet?poll=${pollId}`;
+
+  useEffect(() => {
+    if (show && canvasRef.current) {
+      QRCode.toCanvas(canvasRef.current, pollUrl, {
+        width: 200,
+        margin: 0,
+        color: {
+          dark: '#000000',
+          light: '#ffffff'
+        }
+      });
+    }
+  }, [show, pollUrl]);
+
+  if (!show) return null;
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(pollUrl);
@@ -52,14 +66,7 @@ export default function PollCreatedModal({ show, onClose, pollId, pollTitle }) {
             </p>
             <div className="flex justify-center">
               <div className="bg-white p-4 rounded-2xl border-4 border-gray-100 shadow-lg">
-                <QRCodeSVG
-                  value={pollUrl}
-                  size={200}
-                  level="H"
-                  includeMargin={false}
-                  bgColor="#ffffff"
-                  fgColor="#000000"
-                />
+                <canvas ref={canvasRef} />
               </div>
             </div>
           </div>
