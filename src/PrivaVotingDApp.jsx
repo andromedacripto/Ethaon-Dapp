@@ -9,6 +9,7 @@ import TabNavigation from './components/TabNavigation';
 import PollCard from './components/PollCard';
 import EndedPollCard from './components/EndedPollCard';
 import CreatePollModal from './components/CreatePollModal';
+import PollCreatedModal from './components/PollCreatedModal';
 import Footer from './components/Footer';
 
 // Banner Component
@@ -31,6 +32,9 @@ export default function PrivaVotingDApp() {
   const [activeTab, setActiveTab] = useState('polls');
   const [polls, setPolls] = useState([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showPollCreatedModal, setShowPollCreatedModal] = useState(false);
+  const [createdPollData, setCreatedPollData] = useState({ id: null, title: '' });
+  const [focusedPollId, setFocusedPollId] = useState(null);
   const [walletAddress, setWalletAddress] = useState(null);
   const [ensName, setEnsName] = useState(null);
   const [ensAvatar, setEnsAvatar] = useState(null);
@@ -97,8 +101,6 @@ export default function PrivaVotingDApp() {
           
           // Buscar ENS e Avatar
           const { ens, avatar } = await lookupENS(accounts[0]);
-          console.log('🔍 ENS encontrado:', ens);
-          console.log('🖼️ Avatar encontrado:', avatar);
           setEnsName(ens);
           setEnsAvatar(avatar);
         }
@@ -168,8 +170,6 @@ export default function PrivaVotingDApp() {
       
       // Buscar ENS e Avatar
       const { ens, avatar } = await lookupENS(accounts[0]);
-      console.log('🔍 ENS encontrado:', ens);
-      console.log('🖼️ Avatar encontrado:', avatar);
       setEnsName(ens);
       setEnsAvatar(avatar);
       
@@ -316,8 +316,14 @@ export default function PrivaVotingDApp() {
       const result = await privaVoting.createPoll(pollData);
 
       if (result.success) {
-        alert(`Poll created successfully! Poll ID: ${result.pollId}`);
+        // Guardar dados e mostrar modal de sucesso
+        setCreatedPollData({ 
+          id: result.pollId, 
+          title: newPoll.title 
+        });
         setShowCreateModal(false);
+        setShowPollCreatedModal(true);
+        
         setNewPoll({ 
           title: '', 
           description: '', 
@@ -385,6 +391,13 @@ export default function PrivaVotingDApp() {
 
   useEffect(() => {
     checkWalletConnection();
+    
+    // Detectar poll ID na URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const pollId = urlParams.get('poll');
+    if (pollId) {
+      setFocusedPollId(parseInt(pollId));
+    }
   }, []);
 
   useEffect(() => {
@@ -392,7 +405,7 @@ export default function PrivaVotingDApp() {
       loadFees();
       loadPolls();
     }
-  }, [provider, signer]);
+  }, [provider, signer, focusedPollId]); // Adicionar focusedPollId como dependência
 
   const activePolls = polls.filter(p => p.isActive).reverse();
   const endedPolls = polls.filter(p => !p.isActive).reverse();
@@ -400,6 +413,113 @@ export default function PrivaVotingDApp() {
   // Exibir ENS ou endereço encurtado
   const displayAddress = ensName || (walletAddress ? `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}` : null);
 
+  // Se tiver focusedPollId, pegar só essa poll
+  const focusedPoll = focusedPollId ? polls.find(p => p.id === focusedPollId) : null;
+
+  // Modo focused: mostrar só uma poll
+  if (focusedPollId && focusedPoll) {
+    return (
+      <div className="min-h-screen bg-white pt-10">
+        <Banner />
+        
+        <Header
+          walletAddress={walletAddress}
+          displayAddress={displayAddress}
+          ensAvatar={ensAvatar}
+          isConnecting={isConnecting}
+          isLoading={isLoading || privaVoting.loading}
+          onConnect={connectWallet}
+          onDisconnect={disconnectWallet}
+          onRefresh={loadPolls}
+          onCreatePoll={() => setShowCreateModal(true)}
+        />
+
+        <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-[80vh]">
+          {/* Back Button */}
+          <button
+            onClick={() => {
+              setFocusedPollId(null);
+              window.history.pushState({}, '', '/testnet');
+            }}
+            className="mb-6 text-gray-600 hover:text-black transition-colors flex items-center space-x-2"
+          >
+            <span>←</span>
+            <span>Back to all polls</span>
+          </button>
+
+          {/* Connect Wallet Warning */}
+          {!walletAddress && (
+            <div className="bg-yellow-50 border-2 border-yellow-200 rounded-2xl p-6 mb-6">
+              <div className="flex items-start space-x-3">
+                <Wallet className="w-6 h-6 text-yellow-600 mt-1" />
+                <div>
+                  <h3 className="font-semibold text-yellow-900 mb-1">Connect Your Wallet</h3>
+                  <p className="text-sm text-yellow-700">
+                    Connect to TEN Protocol Testnet to vote. Fees: {createFee} ETH to create, {voteFee} ETH to vote.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Loading */}
+          {(isLoading || privaVoting.loading) && (
+            <div className="text-center py-16">
+              <RefreshCw className="w-16 h-16 text-gray-300 mx-auto mb-4 animate-spin" />
+              <p className="text-gray-600">Loading poll...</p>
+            </div>
+          )}
+
+          {/* Poll não encontrada */}
+          {!isLoading && !privaVoting.loading && !focusedPoll && (
+            <div className="text-center py-16">
+              <Lock className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Poll not found</h3>
+              <p className="text-gray-600 mb-6">This poll doesn't exist or hasn't loaded yet.</p>
+              <button
+                onClick={() => {
+                  setFocusedPollId(null);
+                  window.history.pushState({}, '', '/testnet');
+                }}
+                className="bg-black text-white px-6 py-3 rounded-xl font-semibold hover:bg-gray-800 transition-all"
+              >
+                View all polls
+              </button>
+            </div>
+          )}
+
+          {/* Mostrar a Poll */}
+          {!isLoading && !privaVoting.loading && focusedPoll && (
+            <PollCard
+              poll={focusedPoll}
+              onVote={submitVote}
+              walletAddress={walletAddress}
+            />
+          )}
+        </main>
+
+        <CreatePollModal
+          show={showCreateModal}
+          onClose={() => setShowCreateModal(false)}
+          newPoll={newPoll}
+          setNewPoll={setNewPoll}
+          onCreate={createPoll}
+          createFee={createFee}
+        />
+
+        <PollCreatedModal
+          show={showPollCreatedModal}
+          onClose={() => setShowPollCreatedModal(false)}
+          pollId={createdPollData.id}
+          pollTitle={createdPollData.title}
+        />
+
+        <Footer />
+      </div>
+    );
+  }
+
+  // Modo normal: mostrar todas as polls
   return (
     <div className="min-h-screen bg-white pt-10">
       <Banner />
@@ -505,6 +625,13 @@ export default function PrivaVotingDApp() {
         setNewPoll={setNewPoll}
         onCreate={createPoll}
         createFee={createFee}
+      />
+
+      <PollCreatedModal
+        show={showPollCreatedModal}
+        onClose={() => setShowPollCreatedModal(false)}
+        pollId={createdPollData.id}
+        pollTitle={createdPollData.title}
       />
 
       <Footer />
